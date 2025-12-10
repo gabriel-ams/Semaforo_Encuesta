@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encuesta Síndrome de Burnout</title>
+    <?!= include('style'); ?>
+</head>
+
+<body>
+
+    <div class="container" id="mainContainer">
+        <header>
+            <div class="header-content">
+                <h1>Síndrome de Burnout</h1>
+                <p>Tu bienestar es importante para nosotros. Por favor responde con honestidad.</p>
+            </div>
+        </header>
+
+        <form id="burnoutForm" onsubmit="handleFormSubmit(this)">
+            <!-- Question 1 -->
+            <div class="form-card">
+                <div class="question-title">
+                    <div class="question-number">1</div>
+                    <span>Si fueras una batería recargable, ¿en qué porcentaje de carga real sientes que estás iniciando
+                        esta semana para enfrentar los retos técnicos?</span>
+                </div>
+                <div class="options-group">
+                    <label class="option-label">
+                        <input type="radio" name="pregunta1" value="0% - 20%" required class="option-input">
+                        <div class="custom-radio"></div>
+                        <div class="option-content">
+                            <span class="option-text"><strong>0% - 20%:</strong> (Modo Ahorro de Energía) - Estoy
+                                agotado, necesito recarga urgente.</span>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="pregunta1" value="21% - 60%" class="option-input">
+                        <div class="custom-radio"></div>
+                        <div class="option-content">
+                            <span class="option-text"><strong>21% - 60%:</strong> (Operativo pero bajo) - Saco el
+                                trabajo, pero me cuesta concentrarme.</span>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="pregunta1" value="61% - 100%" class="option-input">
+                        <div class="custom-radio"></div>
+                        <div class="option-content">
+                            <span class="option-text"><strong>61% - 100%:</strong> (Carga Óptima) - Tengo energía y
+                                claridad mental para resolver problemas.</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="form-card">
+                <div class="question-title">
+                    <div class="question-number">2</div>
+                    <span>La ingeniería requiere cabeza fría. En la última semana, ¿cuántas veces sentiste 'niebla
+                        mental' o te costó resolver algo que normalmente haces rápido?</span>
+                </div>
+                <div class="options-group">
+                    <label class="option-label">
+                        <input type="radio" name="pregunta2" value="Nunca" required class="option-input">
+                        <div class="custom-radio"></div>
+                        <div class="option-content">
+                            <span class="option-text"><strong>Nunca:</strong> Mi mente estuvo clara.</span>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="pregunta2" value="Algunas veces" class="option-input">
+                        <div class="custom-radio"></div>
+                        <div class="option-content">
+                            <span class="option-text"><strong>Algunas veces:</strong> Tuve momentos de bloqueo.</span>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="pregunta2" value="Frecuentemente" class="option-input">
+                        <div class="custom-radio"></div>
+                        <div class="option-content">
+                            <span class="option-text"><strong>Frecuentemente:</strong> Me sentí saturado/bloqueado la
+                                mayor parte del tiempo.</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="form-card">
+                <div class="question-title">
+                    <div class="question-number">3</div>
+                    <span>Este último fin de semana/días libres, ¿lograste desconectarte totalmente de los temas
+                        laborales?</span>
+                </div>
+                <div class="options-group">
+                    <label class="option-label">
+                        <input type="radio" name="pregunta3" value="Sí, totalmente" required class="option-input">
+                        <div class="custom-radio"></div>
+                        <div class="option-content">
+                            <span class="option-text"><strong>Sí, totalmente:</strong> Disfruté mi vida personal/social
+                                sin pensar en el trabajo.</span>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="pregunta3" value="Parcialmente" class="option-input">
+                        <div class="custom-radio"></div>
+                        <div class="option-content">
+                            <span class="option-text"><strong>Parcialmente:</strong> Atendí algunos mensajes o me quedé
+                                pensando en pendientes.</span>
+                        </div>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="pregunta3" value="No" class="option-input">
+                        <div class="custom-radio"></div>
+                        <div class="option-content">
+                            <span class="option-text"><strong>No:</strong> Trabajé o estuve estresado por temas
+                                laborales todo el tiempo.</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn">Enviar Respuestas</button>
+        </form>
+    </div>
+
+    <!-- Success Message -->
+    <div class="container hidden" id="successMessage">
+        <div class="success-message">
+            <div class="success-icon">
+                ✓
+            </div>
+            <h2 style="margin-bottom: 10px; color: var(--color-ams-primary);">¡Gracias por tu respuesta!</h2>
+            <p style="color: var(--color-text-secondary);">Tus respuestas se han guardado correctamente.</p>
+        </div>
+    </div>
+
+    <script>
+        function preventFormSubmit(event) {
+            event.preventDefault();
+        }
+
+        function handleFormSubmit(formObject) {
+            event.preventDefault();
+
+            const btn = document.getElementById('submitBtn');
+            const originalText = btn.innerText;
+            btn.disabled = true;
+            btn.innerText = 'Enviando...';
+
+            google.script.run
+                .withSuccessHandler(onSuccess)
+                .withFailureHandler(onFailure)
+                .processForm(formObject);
+        }
+
+        function onSuccess() {
+            document.getElementById('mainContainer').classList.add('hidden');
+            document.getElementById('successMessage').classList.remove('hidden');
+        }
+
+        function onFailure(error) {
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = false;
+            btn.innerText = 'Intentar de nuevo';
+            alert('Error al enviar: ' + error.message);
+        }
+    </script>
+</body>
+
+</html>

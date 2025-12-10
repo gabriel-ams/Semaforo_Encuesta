@@ -1,0 +1,334 @@
+<style>
+    :root {
+        /* ------------------ PALETA CORPORATIVA AMS ------------------ */
+        --color-ams-primary: #062362;
+        /* Azul Marino AMS */
+        --color-ams-secondary: #004a99;
+        /* Azul de acción */
+        --color-ams-accent: #04af51;
+        /* Verde Lima de acento */
+        --color-ams-accent-hover: #038e41;
+        /* Verde oscuro para hover */
+
+        /* ------------------ COLORES BASE ------------------ */
+        --color-bg: #f0f4f8;
+        /* Fondo general más suave */
+        --color-white: #ffffff;
+        --color-border: #e2e8f0;
+        /* Gris suave para bordes */
+        --color-text-primary: #1a202c;
+        /* Negro suave */
+        --color-text-secondary: #4a5568;
+        /* Gris oscuro */
+        --color-success: #10b981;
+
+        /* ------------------ VARIABLES UI ------------------ */
+        --border-radius-card: 16px;
+        --border-radius-input: 8px;
+        --transition-base: all 0.3s ease;
+        --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+        /* ------------------ SOMBRAS PREMIUM ------------------ */
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        --box-shadow-btn: 0 4px 12px rgba(0, 51, 102, 0.2);
+        --box-shadow-btn-hover: 0 6px 16px rgba(0, 85, 204, 0.4);
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: var(--font-main);
+        background-color: var(--color-bg);
+        color: var(--color-text-primary);
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    /* HEADER */
+    header {
+        text-align: center;
+        margin-bottom: 40px;
+        animation: fadeInDown 0.8s ease-out;
+    }
+
+    .header-content h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--color-ams-primary);
+        margin-bottom: 10px;
+        letter-spacing: -0.025em;
+    }
+
+    .header-content p {
+        color: var(--color-text-secondary);
+        font-size: 1.1rem;
+    }
+
+    /* FORM CARDS */
+    .form-card {
+        background: var(--color-white);
+        border-radius: var(--border-radius-card);
+        padding: 32px;
+        margin-bottom: 24px;
+        box-shadow: var(--shadow-md);
+        transition: var(--transition-base);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 0.8s ease-out both;
+    }
+
+    .form-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    /* Staggered Animation delays for cards */
+    .form-card:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .form-card:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .form-card:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+
+    .question-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--color-ams-primary);
+        margin-bottom: 20px;
+        display: flex;
+        gap: 12px;
+    }
+
+    .question-number {
+        background-color: var(--color-ams-primary);
+        color: white;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+        margin-top: 3px;
+    }
+
+    /* RADIO OPTIONS */
+    .options-group {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .option-label {
+        display: flex;
+        align-items: flex-start;
+        padding: 16px;
+        border: 2px solid var(--color-border);
+        border-radius: var(--border-radius-input);
+        cursor: pointer;
+        transition: var(--transition-base);
+        position: relative;
+    }
+
+    .option-label:hover {
+        border-color: var(--color-ams-secondary);
+        background-color: #f8fafc;
+    }
+
+    .option-input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .custom-radio {
+        height: 20px;
+        width: 20px;
+        border: 2px solid var(--color-text-secondary);
+        border-radius: 50%;
+        margin-right: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition-base);
+        flex-shrink: 0;
+        margin-top: 3px;
+    }
+
+    .custom-radio::after {
+        content: "";
+        width: 10px;
+        height: 10px;
+        background-color: white;
+        border-radius: 50%;
+        transform: scale(0);
+        transition: var(--transition-base);
+    }
+
+    /* Selected State */
+    .option-input:checked~.custom-radio {
+        border-color: var(--color-ams-accent);
+        background-color: var(--color-ams-accent);
+    }
+
+    .option-input:checked~.custom-radio::after {
+        transform: scale(1);
+    }
+
+    .option-input:checked~.option-text {
+        color: var(--color-ams-primary);
+        font-weight: 600;
+    }
+
+    .option-input:checked~.custom-radio {
+        box-shadow: 0 0 0 4px rgba(4, 175, 81, 0.15);
+    }
+
+    .option-label:has(.option-input:checked) {
+        border-color: var(--color-ams-accent);
+        background-color: rgba(4, 175, 81, 0.04);
+    }
+
+    .option-text {
+        font-size: 1rem;
+        color: var(--color-text-primary);
+    }
+
+    /* SUBMIT BUTTON */
+    .btn-submit {
+        background: linear-gradient(135deg, var(--color-ams-secondary) 0%, var(--color-ams-primary) 100%);
+        color: white;
+        border: none;
+        padding: 18px 36px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 50px;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 20px;
+        transition: var(--transition-base);
+        box-shadow: var(--box-shadow-btn);
+        letter-spacing: 0.5px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--box-shadow-btn-hover);
+        filter: brightness(110%);
+    }
+
+    .btn-submit:active {
+        transform: translateY(0);
+    }
+
+    .btn-submit:disabled {
+        background: #cbd5e1;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* SUCCESS MESSAGE */
+    .hidden {
+        display: none;
+    }
+
+    .success-message {
+        text-align: center;
+        padding: 40px;
+        background: white;
+        border-radius: var(--border-radius-card);
+        box-shadow: var(--shadow-lg);
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    .success-icon {
+        width: 80px;
+        height: 80px;
+        background-color: rgba(16, 185, 129, 0.1);
+        color: var(--color-success);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 40px;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* MEDIA QUERIES */
+    @media (max-width: 600px) {
+        body {
+            padding: 20px 15px;
+        }
+
+        .header-content h1 {
+            font-size: 2rem;
+        }
+
+        .form-card {
+            padding: 24px;
+        }
+    }
+</style>
