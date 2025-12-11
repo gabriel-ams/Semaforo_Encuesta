@@ -6,9 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Encuesta Síndrome de Burnout</title>
     <?!= include('style'); ?>
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
-    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.11/dist/dotlottie-wc.js" type="module"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 
 <body>
@@ -24,7 +23,7 @@
             </div>
         </header>
 
-        <form id="burnoutForm" onsubmit="handleFormSubmit(this)">
+        <form id="burnoutForm" onsubmit="handleFormSubmit(event)">
             <div class="form-card">
                 <div class="question-title">
                     <div class="question-number">1</div>
@@ -36,16 +35,16 @@
                         <input type="radio" name="pregunta1" value="0% - 20%" required class="option-input">
                         <div class="custom-radio"></div>
                         <div class="option-content">
-                            <span class="option-text"><strong>0% - 20%:</strong> (Modo Ahorro de Energía) - Estoy
-                                agotado, necesito recarga urgente.</span>
+                            <span class="option-text"><strong>0% - 20%:</strong> (Modo Ahorro) - Agotado, necesito
+                                recarga.</span>
                         </div>
                     </label>
                     <label class="option-label">
                         <input type="radio" name="pregunta1" value="21% - 60%" class="option-input">
                         <div class="custom-radio"></div>
                         <div class="option-content">
-                            <span class="option-text"><strong>21% - 60%:</strong> (Operativo pero bajo) - Saco el
-                                trabajo, pero me cuesta concentrarme.</span>
+                            <span class="option-text"><strong>21% - 60%:</strong> (Operativo bajo) - Me cuesta
+                                concentrarme.</span>
                         </div>
                     </label>
                     <label class="option-label">
@@ -53,7 +52,7 @@
                         <div class="custom-radio"></div>
                         <div class="option-content">
                             <span class="option-text"><strong>61% - 100%:</strong> (Carga Óptima) - Tengo energía y
-                                claridad mental para resolver problemas.</span>
+                                claridad.</span>
                         </div>
                     </label>
                 </div>
@@ -62,8 +61,7 @@
             <div class="form-card">
                 <div class="question-title">
                     <div class="question-number">2</div>
-                    <span>En la última semana, ¿cuántas veces sentiste 'niebla mental' o te costó resolver algo de
-                        normalmente haces rápido?</span>
+                    <span>En la última semana, ¿cuántas veces sentiste 'niebla mental'?</span>
                 </div>
                 <div class="options-group">
                     <label class="option-label">
@@ -84,8 +82,8 @@
                         <input type="radio" name="pregunta2" value="Frecuentemente" class="option-input">
                         <div class="custom-radio"></div>
                         <div class="option-content">
-                            <span class="option-text"><strong>Frecuentemente:</strong> Me sentí saturado/bloqueado la
-                                mayor parte del tiempo.</span>
+                            <span class="option-text"><strong>Frecuentemente:</strong> Me sentí saturado la mayor parte
+                                del tiempo.</span>
                         </div>
                     </label>
                 </div>
@@ -130,15 +128,35 @@
 
     <div class="container hidden" id="loadingMessage">
         <div class="success-message">
-            <div style="width: 100%; height: auto; display: flex; justify-content: center;">
-
-                <lottie-player src="https://lottie.host/7c9a7aab-712e-4896-a31f-c2e97dfd2a8a/1DRF1cDL5i.json"
-                    background="transparent" speed="1" style="width: 60%; height: auto;" loop autoplay>
-                </lottie-player>
-
+            <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                <div style="width: 300px; height: 300px;">
+                    <lottie-player src="https://lottie.host/7c9a7aab-712e-4896-a31f-c2e97dfd2a8a/1DRF1cDL5i.json"
+                        background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay>
+                    </lottie-player>
+                </div>
             </div>
-            <h2 style="color: var(--color-ams-primary);">Procesando tus respuestas...</h2>
-            <p style="color: var(--color-text-secondary);">Por favor espera un momento.</p>
+            <h2 style="color: var(--color-ams-primary);">Verificando usuario...</h2>
+            <p style="color: var(--color-text-secondary);">Un momento por favor.</p>
+        </div>
+    </div>
+
+    <div class="container hidden" id="nameModal">
+        <div class="form-card" style="text-align: center; border: 2px solid var(--color-ams-secondary);">
+            <h2 style="color: var(--color-ams-primary); margin-bottom: 15px;">¡Bienvenido/a!</h2>
+            <p style="color: var(--color-text-secondary); margin-bottom: 20px;">
+                Es la primera vez que detectamos tu correo. Por favor, ingresa tu nombre completo para crear tu
+                expediente personal.
+            </p>
+
+            <div style="margin-bottom: 25px; text-align: left;">
+                <label for="newUserName"
+                    style="display:block; margin-bottom: 8px; font-weight: 600; color: var(--color-text-secondary);">Nombre
+                    Completo:</label>
+                <input type="text" id="newUserName" placeholder="Ej. Juan Pérez"
+                    style="width: 100%; padding: 12px; border: 2px solid var(--color-border); border-radius: var(--border-radius-input); font-size: 1rem;">
+            </div>
+
+            <button onclick="submitName()" class="btn-submit">Confirmar y Guardar</button>
         </div>
     </div>
 
@@ -146,8 +164,11 @@
         <div class="success-message">
 
             <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-                <dotlottie-wc id="semaforoAnimacion" src="" style="width: 300px; height: 300px;" autoplay loop>
-                </dotlottie-wc>
+                <div style="width: 300px; height: 300px;">
+                    <lottie-player id="semaforoAnimacion" src="" background="transparent" speed="1"
+                        style="width: 100%; height: 100%;" autoplay loop>
+                    </lottie-player>
+                </div>
             </div>
 
             <h2 id="tituloResultado" style="margin-bottom: 10px; color: var(--color-ams-primary);">¡Gracias!</h2>
@@ -156,76 +177,92 @@
     </div>
 
     <script>
-        function preventFormSubmit(event) {
-            event.preventDefault();
-        }
+        let cachedFormObject = null;
 
-        function handleFormSubmit(formObject) {
+        function handleFormSubmit(event) {
             event.preventDefault();
 
-            // 1. Ocultar Formulario
+            // Guardar datos
+            const formElement = document.getElementById('burnoutForm');
+            cachedFormObject = Object.fromEntries(new FormData(formElement).entries());
+
+            // UI Changes
             document.getElementById('mainContainer').classList.add('hidden');
-
-            // 2. Mostrar Pantalla de Carga (Animación del Robot)
             document.getElementById('loadingMessage').classList.remove('hidden');
 
-            // 3. Enviar datos al servidor
+            // Llamada inicial
             google.script.run
-                .withSuccessHandler(onSuccess)
+                .withSuccessHandler(onServerResponse)
                 .withFailureHandler(onFailure)
-                .processForm(formObject);
+                .processForm(cachedFormObject, null);
         }
 
-        function onSuccess(colorResultado) {
-            // 1. Ocultar Pantalla de Carga
+        function submitName() {
+            const nameInput = document.getElementById('newUserName').value;
+            if (!nameInput || nameInput.trim() === "") {
+                alert("Por favor escribe tu nombre.");
+                return;
+            }
+
+            document.getElementById('nameModal').classList.add('hidden');
+            document.getElementById('loadingMessage').classList.remove('hidden');
+            document.querySelector('#loadingMessage h2').innerText = "Creando tu expediente...";
+
+            google.script.run
+                .withSuccessHandler(onServerResponse)
+                .withFailureHandler(onFailure)
+                .processForm(cachedFormObject, nameInput);
+        }
+
+        function onServerResponse(response) {
             document.getElementById('loadingMessage').classList.add('hidden');
 
-            // 2. Mostrar Pantalla de Resultado
+            if (response.status === "necesita_nombre") {
+                document.getElementById('nameModal').classList.remove('hidden');
+            }
+            else if (response.status === "exito") {
+                showFinalResult(response.color);
+            }
+        }
+
+        function showFinalResult(colorResultado) {
             document.getElementById('successMessage').classList.remove('hidden');
 
             const player = document.getElementById('semaforoAnimacion');
             const titulo = document.getElementById('tituloResultado');
             const texto = document.getElementById('textoResultado');
 
-            // CONFIGURACIÓN DE ANIMACIONES
             let animacionUrl = "";
 
             if (colorResultado === "rojo") {
-                // SEMÁFORO ROJO
                 animacionUrl = "https://lottie.host/1ad27c02-1867-4c45-9f83-c90261aca29a/eSXUMAMj95.json";
                 titulo.innerText = "Nivel de energía: Crítico";
                 texto.innerText = "Detectamos signos de agotamiento importante. Es vital que tomes un descanso.";
-                player.setAttribute('style', 'width: 100%; height: auto;');
             }
             else if (colorResultado === "amarillo") {
-                // SEMÁFORO AMARILLO
                 animacionUrl = "https://lottie.host/cddaa1f9-2233-4afe-b648-81049144e1a2/dKMKw6LmRz.json";
                 titulo.innerText = "Nivel de energía: Precaución";
                 texto.innerText = "Estás operativo, pero hay señales de desgaste. Cuida tu ritmo esta semana.";
-                player.setAttribute('style', 'width: 100%; height: auto;');
             }
             else {
-                // SEMÁFORO VERDE
                 animacionUrl = "https://lottie.host/a3f1f6c0-0140-4497-8ec3-2fa12b96b398/CGbdlbuPfI.json";
                 titulo.innerText = "Nivel de energía: Óptimo";
                 texto.innerText = "¡Excelente! Tienes buena carga y claridad mental.";
-                player.setAttribute('style', 'width: 100%; height: auto;');
             }
 
-            // Actualizar el src del reproductor
-            // Nota: Para dotlottie-wc usamos setAttribute o la propiedad src
-            player.setAttribute('src', animacionUrl);
+            // CORRECCIÓN: Usamos load() para lottie-player y eliminamos estilos forzados
+            player.load(animacionUrl);
         }
 
         function onFailure(error) {
-            // Si falla, ocultar carga y volver a mostrar formulario con error
             document.getElementById('loadingMessage').classList.add('hidden');
+            document.getElementById('nameModal').classList.add('hidden');
             document.getElementById('mainContainer').classList.remove('hidden');
 
             const btn = document.getElementById('submitBtn');
             btn.disabled = false;
             btn.innerText = 'Enviar Respuestas';
-            alert('Error al enviar: ' + error.message);
+            alert('Error: ' + error.message);
         }
     </script>
 </body>
