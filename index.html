@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Encuesta Síndrome de Burnout</title>
     <?!= include('style'); ?>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.11/dist/dotlottie-wc.js" type="module"></script>
 </head>
 
 <body>
@@ -22,12 +25,11 @@
         </header>
 
         <form id="burnoutForm" onsubmit="handleFormSubmit(this)">
-            <!-- Question 1 -->
             <div class="form-card">
                 <div class="question-title">
                     <div class="question-number">1</div>
                     <span>Si fueras una batería recargable, ¿en qué porcentaje de carga real sientes que estás iniciando
-                        esta semana para enfrentar los retos técnicos?</span>
+                        esta semana?</span>
                 </div>
                 <div class="options-group">
                     <label class="option-label">
@@ -57,12 +59,11 @@
                 </div>
             </div>
 
-            <!-- Question 2 -->
             <div class="form-card">
                 <div class="question-title">
                     <div class="question-number">2</div>
-                    <span>La ingeniería requiere cabeza fría. En la última semana, ¿cuántas veces sentiste 'niebla
-                        mental' o te costó resolver algo que normalmente haces rápido?</span>
+                    <span>En la última semana, ¿cuántas veces sentiste 'niebla mental' o te costó resolver algo de
+                        normalmente haces rápido?</span>
                 </div>
                 <div class="options-group">
                     <label class="option-label">
@@ -90,36 +91,34 @@
                 </div>
             </div>
 
-            <!-- Question 3 -->
             <div class="form-card">
                 <div class="question-title">
                     <div class="question-number">3</div>
-                    <span>Este último fin de semana/días libres, ¿lograste desconectarte totalmente de los temas
-                        laborales?</span>
+                    <span>¿Lograste desconectarte totalmente de los temas laborales en tus días libres?</span>
                 </div>
                 <div class="options-group">
                     <label class="option-label">
                         <input type="radio" name="pregunta3" value="Sí, totalmente" required class="option-input">
                         <div class="custom-radio"></div>
                         <div class="option-content">
-                            <span class="option-text"><strong>Sí, totalmente:</strong> Disfruté mi vida personal/social
-                                sin pensar en el trabajo.</span>
+                            <span class="option-text"><strong>Sí, totalmente:</strong> Disfruté sin pensar en el
+                                trabajo.</span>
                         </div>
                     </label>
                     <label class="option-label">
                         <input type="radio" name="pregunta3" value="Parcialmente" class="option-input">
                         <div class="custom-radio"></div>
                         <div class="option-content">
-                            <span class="option-text"><strong>Parcialmente:</strong> Atendí algunos mensajes o me quedé
-                                pensando en pendientes.</span>
+                            <span class="option-text"><strong>Parcialmente:</strong> Atendí mensajes o pensé en
+                                pendientes.</span>
                         </div>
                     </label>
                     <label class="option-label">
                         <input type="radio" name="pregunta3" value="No" class="option-input">
                         <div class="custom-radio"></div>
                         <div class="option-content">
-                            <span class="option-text"><strong>No:</strong> Trabajé o estuve estresado por temas
-                                laborales todo el tiempo.</span>
+                            <span class="option-text"><strong>No:</strong> Estuve estresado por trabajo todo el
+                                tiempo.</span>
                         </div>
                     </label>
                 </div>
@@ -129,14 +128,30 @@
         </form>
     </div>
 
-    <!-- Success Message -->
+    <div class="container hidden" id="loadingMessage">
+        <div class="success-message">
+            <div style="width: 100%; height: auto; display: flex; justify-content: center;">
+
+                <lottie-player src="https://lottie.host/7c9a7aab-712e-4896-a31f-c2e97dfd2a8a/1DRF1cDL5i.json"
+                    background="transparent" speed="1" style="width: 60%; height: auto;" loop autoplay>
+                </lottie-player>
+
+            </div>
+            <h2 style="color: var(--color-ams-primary);">Procesando tus respuestas...</h2>
+            <p style="color: var(--color-text-secondary);">Por favor espera un momento.</p>
+        </div>
+    </div>
+
     <div class="container hidden" id="successMessage">
         <div class="success-message">
-            <div class="success-icon">
-                ✓
+
+            <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                <dotlottie-wc id="semaforoAnimacion" src="" style="width: 300px; height: 300px;" autoplay loop>
+                </dotlottie-wc>
             </div>
-            <h2 style="margin-bottom: 10px; color: var(--color-ams-primary);">¡Gracias por tu respuesta!</h2>
-            <p style="color: var(--color-text-secondary);">Tus respuestas se han guardado correctamente.</p>
+
+            <h2 id="tituloResultado" style="margin-bottom: 10px; color: var(--color-ams-primary);">¡Gracias!</h2>
+            <p id="textoResultado" style="color: var(--color-text-secondary);">Tus respuestas se han guardado.</p>
         </div>
     </div>
 
@@ -148,26 +163,68 @@
         function handleFormSubmit(formObject) {
             event.preventDefault();
 
-            const btn = document.getElementById('submitBtn');
-            const originalText = btn.innerText;
-            btn.disabled = true;
-            btn.innerText = 'Enviando...';
+            // 1. Ocultar Formulario
+            document.getElementById('mainContainer').classList.add('hidden');
 
+            // 2. Mostrar Pantalla de Carga (Animación del Robot)
+            document.getElementById('loadingMessage').classList.remove('hidden');
+
+            // 3. Enviar datos al servidor
             google.script.run
                 .withSuccessHandler(onSuccess)
                 .withFailureHandler(onFailure)
                 .processForm(formObject);
         }
 
-        function onSuccess() {
-            document.getElementById('mainContainer').classList.add('hidden');
+        function onSuccess(colorResultado) {
+            // 1. Ocultar Pantalla de Carga
+            document.getElementById('loadingMessage').classList.add('hidden');
+
+            // 2. Mostrar Pantalla de Resultado
             document.getElementById('successMessage').classList.remove('hidden');
+
+            const player = document.getElementById('semaforoAnimacion');
+            const titulo = document.getElementById('tituloResultado');
+            const texto = document.getElementById('textoResultado');
+
+            // CONFIGURACIÓN DE ANIMACIONES
+            let animacionUrl = "";
+
+            if (colorResultado === "rojo") {
+                // SEMÁFORO ROJO
+                animacionUrl = "https://lottie.host/1ad27c02-1867-4c45-9f83-c90261aca29a/eSXUMAMj95.json";
+                titulo.innerText = "Nivel de energía: Crítico";
+                texto.innerText = "Detectamos signos de agotamiento importante. Es vital que tomes un descanso.";
+                player.setAttribute('style', 'width: 100%; height: auto;');
+            }
+            else if (colorResultado === "amarillo") {
+                // SEMÁFORO AMARILLO
+                animacionUrl = "https://lottie.host/cddaa1f9-2233-4afe-b648-81049144e1a2/dKMKw6LmRz.json";
+                titulo.innerText = "Nivel de energía: Precaución";
+                texto.innerText = "Estás operativo, pero hay señales de desgaste. Cuida tu ritmo esta semana.";
+                player.setAttribute('style', 'width: 100%; height: auto;');
+            }
+            else {
+                // SEMÁFORO VERDE
+                animacionUrl = "https://lottie.host/a3f1f6c0-0140-4497-8ec3-2fa12b96b398/CGbdlbuPfI.json";
+                titulo.innerText = "Nivel de energía: Óptimo";
+                texto.innerText = "¡Excelente! Tienes buena carga y claridad mental.";
+                player.setAttribute('style', 'width: 100%; height: auto;');
+            }
+
+            // Actualizar el src del reproductor
+            // Nota: Para dotlottie-wc usamos setAttribute o la propiedad src
+            player.setAttribute('src', animacionUrl);
         }
 
         function onFailure(error) {
+            // Si falla, ocultar carga y volver a mostrar formulario con error
+            document.getElementById('loadingMessage').classList.add('hidden');
+            document.getElementById('mainContainer').classList.remove('hidden');
+
             const btn = document.getElementById('submitBtn');
             btn.disabled = false;
-            btn.innerText = 'Intentar de nuevo';
+            btn.innerText = 'Enviar Respuestas';
             alert('Error al enviar: ' + error.message);
         }
     </script>
